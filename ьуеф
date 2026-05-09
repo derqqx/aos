@@ -114,3 +114,7 @@ if __name__ == "__main__":
 
 python3 fs_inventory.py . linux_fs_inventory.csv
 head linux_fs_inventory.csv
+
+cd ~/fs-internals-lab
+
+python3 fs_inventory.py . baseline_linux.csv
