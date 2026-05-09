@@ -1,15 +1,10 @@
 cd ~/fs-internals-lab
-mkdir -p links
-cd links
+mkdir -p allocation
+cd allocation
 
-printf "Original content\n" > original.txt
-ln original.txt hardlink.txt
-ln -s original.txt symlink.txt
+dd if=/dev/zero of=normal.bin bs=1M count=10
+truncate -s 10M sparse.bin
 
-ls -li
-stat original.txt hardlink.txt symlink.txt
-printf "Added through hard link\n" >> hardlink.txt
-cat original.txt
-rm original.txt
-cat hardlink.txt
-cat symlink.txt
+ls -lh normal.bin sparse.bin
+du -h normal.bin sparse.bin
+stat normal.bin sparse.bin
