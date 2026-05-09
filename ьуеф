@@ -1,10 +1,19 @@
-Zhumash@Adilzhan:~/fs-internals-lab/workspace$ 
-python3 ~/fs-internals-lab/metadata_check.py metadata-test.txt
-Path: metadata-test.txt
-Size: 37
-Mode: 0o100600
-Inode or file index: 399170
-Link count: 1
-Access time: 2026-05-09 18:29:20
-Modify time: 2026-05-09 18:29:50
-Change/create time: 2026-05-09 18:30:07
+cd ~/fs-internals-lab/workspace
+
+printf "Permission test file\n" > perm-test.txt
+
+ls -l perm-test.txt
+
+stat -c "%A %a %U %G %n" perm-test.txt
+
+chmod 600 perm-test.txt
+
+ls -l perm-test.txt
+
+stat -c "%A %a %U %G %n" perm-test.txt
+
+chmod u+x perm-test.txt
+
+ls -l perm-test.txt
+
+stat -c "%A %a %U %G %n" perm-test.txt
