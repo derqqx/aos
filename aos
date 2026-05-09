@@ -1,0 +1,7 @@
+mkdir -p ~/fs-internals-lab
+cd ~/fs-internals-lab
+
+lsblk -f
+df -T .
+mount | head -n 20
+stat -f .
