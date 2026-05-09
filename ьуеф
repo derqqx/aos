@@ -22,4 +22,4 @@ print("Modify time:", ts(st.st_mtime))
 print("Change/create time:", ts(st.st_ctime))
 
 
-python3 ~/fs-internals-lab/metadata_check.py workspace/metadata-test.txt
+python3 ~/fs-internals-lab/metadata_check.py metadata-test.txt
