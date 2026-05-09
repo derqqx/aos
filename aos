@@ -1,7 +1,12 @@
-mkdir -p ~/fs-internals-lab
 cd ~/fs-internals-lab
 
-lsblk -f
-df -T .
-mount | head -n 20
-stat -f .
+mkdir -p workspace/docs workspace/logs
+
+printf "First file system lab note\n" > workspace/docs/notes.txt
+printf "Readme file\n" > workspace/docs/readme.txt
+printf "2026-01-01 10:00:00 INFO Application started\n" > workspace/logs/app.log
+printf "Hidden test file\n" > workspace/.hidden-linux.txt
+
+ls workspace
+ls -la workspace
+find workspace -maxdepth 2 -type f -print
