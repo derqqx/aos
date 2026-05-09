@@ -1,10 +1,5 @@
-cd ~/fs-internals-lab
-mkdir -p allocation
-cd allocation
-
-dd if=/dev/zero of=normal.bin bs=1M count=10
-truncate -s 10M sparse.bin
-
-ls -lh normal.bin sparse.bin
-du -h normal.bin sparse.bin
-stat normal.bin sparse.bin
+cd ~/fs-internals-lab/workspace
+printf "Hash test content\n" > hash-test.txt
+sha256sum hash-test.txt
+printf "One small change\n" >> hash-test.txt
+sha256sum hash-test.txt
