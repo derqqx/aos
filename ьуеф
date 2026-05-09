@@ -1,19 +1,15 @@
-cd ~/fs-internals-lab/workspace
+cd ~/fs-internals-lab
+mkdir -p links
+cd links
 
-printf "Permission test file\n" > perm-test.txt
+printf "Original content\n" > original.txt
+ln original.txt hardlink.txt
+ln -s original.txt symlink.txt
 
-ls -l perm-test.txt
-
-stat -c "%A %a %U %G %n" perm-test.txt
-
-chmod 600 perm-test.txt
-
-ls -l perm-test.txt
-
-stat -c "%A %a %U %G %n" perm-test.txt
-
-chmod u+x perm-test.txt
-
-ls -l perm-test.txt
-
-stat -c "%A %a %U %G %n" perm-test.txt
+ls -li
+stat original.txt hardlink.txt symlink.txt
+printf "Added through hard link\n" >> hardlink.txt
+cat original.txt
+rm original.txt
+cat hardlink.txt
+cat symlink.txt
