@@ -1,25 +1,10 @@
-nano ~/fs-internals-lab/metadata_check.py
-
-
-import os
-import sys
-import time
-from datetime import datetime
-
-path = sys.argv[1] if len(sys.argv) > 1 else "workspace/metadata-test.txt"
-st = os.stat(path)
-
-def ts(value):
-    return datetime.fromtimestamp(value).isoformat(sep=" ", timespec="seconds")
-
-print("Path:", path)
-print("Size:", st.st_size)
-print("Mode:", oct(st.st_mode))
-print("Inode or file index:", st.st_ino)
-print("Link count:", st.st_nlink)
-print("Access time:", ts(st.st_atime))
-print("Modify time:", ts(st.st_mtime))
-print("Change/create time:", ts(st.st_ctime))
-
-
+Zhumash@Adilzhan:~/fs-internals-lab/workspace$ 
 python3 ~/fs-internals-lab/metadata_check.py metadata-test.txt
+Path: metadata-test.txt
+Size: 37
+Mode: 0o100600
+Inode or file index: 399170
+Link count: 1
+Access time: 2026-05-09 18:29:20
+Modify time: 2026-05-09 18:29:50
+Change/create time: 2026-05-09 18:30:07
