@@ -1,5 +1,113 @@
-cd ~/fs-internals-lab/workspace
-printf "Hash test content\n" > hash-test.txt
-sha256sum hash-test.txt
-printf "One small change\n" >> hash-test.txt
-sha256sum hash-test.txt
+cd ~/fs-internals-lab
+nano fs_inventory.py
+
+import csv
+import hashlib
+import os
+import platform
+import stat
+import sys
+from datetime import datetime
+from pathlib import Path
+
+MAX_HASH_SIZE = 5 * 1024 * 1024
+
+def format_time(timestamp):
+    return datetime.fromtimestamp(timestamp).isoformat(sep=" ", timespec="seconds")
+
+def sha256_file(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+def classify_mode(mode):
+    if stat.S_ISREG(mode):
+        return "regular_file"
+    if stat.S_ISDIR(mode):
+        return "directory"
+    if stat.S_ISLNK(mode):
+        return "symbolic_link"
+    return "other"
+
+def collect(root):
+    root_path = Path(root)
+    rows = []
+
+    for current_root, dirs, files in os.walk(root_path):
+        entries = [Path(current_root) / name for name in dirs + files]
+
+        for path in entries:
+            try:
+                st = os.lstat(path)
+                mode = st.st_mode
+                file_type = classify_mode(mode)
+                size = st.st_size
+                hash_value = ""
+
+                if file_type == "regular_file" and size <= MAX_HASH_SIZE:
+                    try:
+                        hash_value = sha256_file(path)
+                    except OSError:
+                        hash_value = "hash_error"
+
+                rows.append({
+                    "path": str(path),
+                    "type": file_type,
+                    "size_bytes": size,
+                    "mode_octal": oct(mode),
+                    "inode_or_file_index": st.st_ino,
+                    "link_count": st.st_nlink,
+                    "access_time": format_time(st.st_atime),
+                    "modify_time": format_time(st.st_mtime),
+                    "change_or_create_time": format_time(st.st_ctime),
+                    "sha256_if_small_file": hash_value,
+                })
+            except OSError as error:
+                rows.append({
+                    "path": str(path),
+                    "type": "error",
+                    "size_bytes": "",
+                    "mode_octal": "",
+                    "inode_or_file_index": "",
+                    "link_count": "",
+                    "access_time": "",
+                    "modify_time": "",
+                    "change_or_create_time": "",
+                    "sha256_if_small_file": str(error),
+                })
+
+    return rows
+
+def main():
+    root = sys.argv[1] if len(sys.argv) > 1 else "."
+    output = sys.argv[2] if len(sys.argv) > 2 else "fs_inventory.csv"
+    rows = collect(root)
+
+    fieldnames = [
+        "path",
+        "type",
+        "size_bytes",
+        "mode_octal",
+        "inode_or_file_index",
+        "link_count",
+        "access_time",
+        "modify_time",
+        "change_or_create_time",
+        "sha256_if_small_file",
+    ]
+
+    with open(output, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    print("System:", platform.system())
+    print("Root scanned:", root)
+    print("Rows written:", len(rows))
+    print("Output file:", output)
+
+if __name__ == "__main__":
+    main()
+
