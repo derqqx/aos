@@ -1,10 +1,48 @@
-cd ~/fs-internals-lab
-mkdir -p investigation
-printf "Case file version 1\n" > investigation/case.txt
-sleep 2
-printf "Case file version 2\n" >> investigation/case.txt
-ln investigation/case.txt investigation/case-hardlink.txt
-ln -s investigation/case.txt investigation/case-symlink.txt
-printf "New file created during investigation\n" > investigation/new-file.txt
-chmod 640 investigation/new-file.txt
-python3 fs_inventory.py . after_linux.csv
+PART 2 — Linux Baseline Collection
+
+Открой Ubuntu Terminal.
+
+Step 1. Hostname
+hostname
+
+Скриншот.
+
+Step 2. OS Version
+cat /etc/os-release
+
+Скриншот.
+
+Step 3. List Users
+cat /etc/passwd
+
+Скриншот.
+
+Step 4. Check Sudo Group
+getent group sudo
+
+Скриншот.
+
+Step 5. Running Services
+systemctl list-units --type=service --state=running
+
+Скриншот.
+
+Step 6. Firewall Status
+sudo ufw status verbose
+
+Скриншот.
+
+Step 7. Password Policy Files
+sudo cat /etc/login.defs
+
+Скриншот.
+
+Step 8. SSH Configuration
+sudo cat /etc/ssh/sshd_config
+
+Скриншот.
+
+Step 9. File Permissions
+ls -l /etc/shadow /etc/passwd
+
+Скриншот.
