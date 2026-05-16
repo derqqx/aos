@@ -1,48 +1,24 @@
-PART 2 — Linux Baseline Collection
-
-Открой Ubuntu Terminal.
-
-Step 1. Hostname
-hostname
-
-Скриншот.
-
-Step 2. OS Version
-cat /etc/os-release
-
-Скриншот.
-
-Step 3. List Users
-cat /etc/passwd
-
-Скриншот.
-
-Step 4. Check Sudo Group
+5. Lab 3: Linux Hardening
+Step 1. Update packages
+sudo apt update && sudo apt upgrade -y
+Step 2. Check sudo users
 getent group sudo
-
-Скриншот.
-
-Step 5. Running Services
-systemctl list-units --type=service --state=running
-
-Скриншот.
-
-Step 6. Firewall Status
-sudo ufw status verbose
-
-Скриншот.
-
-Step 7. Password Policy Files
+Step 3. Check SSH configuration
+sudo grep -E 'PermitRootLogin|PasswordAuthentication' /etc/ssh/sshd_config
+Step 4. Disable root SSH login
+sudo nano /etc/ssh/sshd_config
+Step 5. Apply SSH change
+PermitRootLogin no
+Step 6. Restart SSH service
+sudo systemctl restart ssh
+Step 7. Check password policy
 sudo cat /etc/login.defs
-
-Скриншот.
-
-Step 8. SSH Configuration
-sudo cat /etc/ssh/sshd_config
-
-Скриншот.
-
-Step 9. File Permissions
-ls -l /etc/shadow /etc/passwd
-
-Скриншот.
+Step 8. Check important permissions
+ls -l /etc/shadow
+Step 9. Enable UFW firewall
+sudo ufw enable
+Step 10. Allow SSH
+sudo ufw allow ssh
+Step 11. Verify firewall
+sudo ufw status verbose
+All changes must be reversible. Students must document each modification.
